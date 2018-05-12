@@ -4,6 +4,7 @@
 #include <sstream>
 #include <random>
 #include <omp.h>
+#include <stdexcept>
 
 std::vector<double> randVector(size_t size) {
 	std::vector<double> result(size);
