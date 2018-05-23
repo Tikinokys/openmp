@@ -80,7 +80,7 @@ Matrix mulSerial(const Matrix& first, const Matrix& second) {
 
 Matrix mulParallel(const Matrix& first, const Matrix& second) {
 	Matrix result(first.rows(), second.cols());
-	if (first.cols() == second.rows())
+	if (first.cols() == second.rows()) {
 		#pragma omp parallel for shared(result, first, second)
 		for (size_t i = 0; i < result.rows(); ++i) 
 			for (size_t j = 0; j < result.cols(); ++j) {
@@ -88,6 +88,7 @@ Matrix mulParallel(const Matrix& first, const Matrix& second) {
 				for (size_t k = 0; k < result.rows(); ++k) 
 					result(i, j) += first(i, k) * second(k, j);
 			}
+	}
 	else
 		throw std::invalid_argument("Wrong dimensions");
 

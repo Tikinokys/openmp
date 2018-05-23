@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=mulMatrix
-#SBATCH --output=result.csv
+#SBATCH --output=result3.csv
 #SBATCH --ntasks=1
 #
 #SBATCH --cpus-per-task=20
@@ -10,7 +10,7 @@
 
 num_for_repeat=5
 
-echo "NumThreads,Dim,Runtime" 
+echo "NumThreads,Dim,Runtime"
 for omp_threads in 1 2 4 6 8 10 12 14 16 18 20
 do
 
@@ -20,7 +20,7 @@ for dim in 1000 1500 2000 2500
 do
 	for ((i=0; i < $num_for_repeat; i++))
 	do
-	./main $dim 
+	./main $dim
 	done
 done
 
