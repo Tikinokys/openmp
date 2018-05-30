@@ -7,18 +7,18 @@
 #include <stdexcept>
 #include <cmath>
 
-double f(double x, double y) {
+double f(double x, double y){
 	return 1;
 }
 
-double g(double x, double y) {
+double g(double x, double y){
 	if(x==0)return 1-y*y;
 	if(y==0)return 1-x*x;
 	if(x==1)return 1-(y-1)*(y-1);
 	return 1-(x-1)*(x-1);
 }
 
-std::vector<double> randVector(size_t size) {
+std::vector<double>randVector(size_t size){
 	std::vector<double> result(size);
 	#pragma omp parallel shared(result)
 	{
@@ -27,10 +27,10 @@ std::vector<double> randVector(size_t size) {
 		std::uniform_real_distribution<double> dis(1.0, 2.0);
 
 		#pragma omp for schedule(static)
-		for (size_t i = 0; i < size; i++)
+		for (size_t i=0; i<size; i++)
 			result[i] = dis(gen);
 	}
-  return result;
+	return result;
 }
 
 class Matrix {
@@ -64,12 +64,12 @@ public:
 
 	std::string to_string() {
 		std::stringstream ss;
-		for (size_t i = 0; i < (*this).rows(); ++i) {
-			for (size_t j = 0; j < (*this).cols(); ++j) {
-				ss << (*this)(i, j);
-				if (j != (*this).cols()-1 ) ss << " ";
+		for(size_t i=0; i<(*this).rows(); ++i){
+			for(size_t j=0; j<(*this).cols(); ++j){
+				ss<<(*this)(i,j);
+				if (j!=(*this).cols()-1)ss<<" ";
 			}
-			ss << std::endl;
+			ss<<std::endl;
 		}
 		return ss.str();
 	}
@@ -219,19 +219,18 @@ inline void print_CSV(int threads, size_t dim, double runtimeDuration) {
 	std::cout << threads << "," << dim << "," << runtimeDuration << std::endl;
 }
 
-int main(int argc, char* argv[]) {
-	size_t N = 99;
-	double eps = 0.001;
-	if (argc > 1){
+int main(int argc, char* argv[]){
+	size_t N=99;
+	double eps=0.001;
+	if(argc>1){
 		std::istringstream ss(argv[1]);
 		int dim;
-		if (!(ss >> dim)){
-			throw std::invalid_argument("INVALID ARGV");
-		} else {
-			N = dim;
+		if(!(ss>>dim)){
+			throw std::invalid_argument("Invalid ARGV");
+		}else{
+			N=dim;
 		}
 	}
-
-	std::cout << Solution_of_Diri(N-2, eps).benchmark();
+	std::cout<<Solution_of_Dirichlet_OMP(N-2,eps).benchmark();
 	return 0;
 }
