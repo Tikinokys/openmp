@@ -44,7 +44,7 @@ def build_surface_plot(surface, details, file):
 	# plt.savefig("{}.pdf".format(file))
 	plt.show()
 
-details = pd.read_csv("dirichlet_benchmark.csv").groupby(['NumThreads','Dim'], as_index = False).mean()
+details = pd.read_csv("dirichlet_result.csv").groupby(['NumThreads','Dim'], as_index = False).mean()
 build_efficiency_plots(details, "d_plots")
 
 df = pd.read_csv("surface.csv", header=None, sep=" ")

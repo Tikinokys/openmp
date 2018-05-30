@@ -62,7 +62,7 @@ public:
 		return m_data[row * m_cols + col];
 	}
 
-	std::string toString() {
+	std::string to_string() {
 		std::stringstream ss;
 		for (size_t i = 0; i < (*this).rows(); ++i) {
 			for (size_t j = 0; j < (*this).cols(); ++j) {
@@ -87,18 +87,18 @@ private:
 	{}
 };
 
-struct DirichletResult {
+struct Results_of_Dirichlet {
 	size_t num_threads;
 	Matrix surface;
 	size_t iterations;
 	double runtime;
 	double eps;
 
-	DirichletResult(size_t nt, Matrix s, size_t i, double r, double e) : num_threads(nt), surface(s), iterations(i), runtime(r), eps(e) {}
+	Results_of_Dirichlet(size_t nt, Matrix s, size_t i, double r, double e) : num_threads(nt), surface(s), iterations(i), runtime(r), eps(e) {}
 
-	std::string toString() {
+	std::string to_string() {
 		std::stringstream ss;
-		ss << surface.toString() << num_threads << "," << iterations << "," << runtime << "," << surface.cols() << "," << eps << std::endl;
+		ss << surface.to_string() << num_threads << "," << iterations << "," << runtime << "," << surface.cols() << "," << eps << std::endl;
 		return ss.str();
 	}
 	std::string benchmark() {
@@ -108,7 +108,7 @@ struct DirichletResult {
 	}
 };
 
-Matrix solveDirichletSerial(size_t N,  double eps) {
+Matrix Solution_of_Dirichlet(size_t N,  double eps) {
 	auto startTime = std::chrono::steady_clock::now();
 	Matrix u_mat(N+2,  N+2);
 	Matrix f_mat(N,  N);
@@ -150,7 +150,7 @@ Matrix solveDirichletSerial(size_t N,  double eps) {
 	return u_mat;
 }
 
-DirichletResult solveDirichlet(size_t N,  double eps) {
+Results_of_Dirichlet Solution_of_Dirichlet_OMP(size_t N,  double eps) {
 	auto startTime = std::chrono::steady_clock::now();
 	
 	Matrix u_mat(N+2,  N+2);
@@ -210,12 +210,12 @@ DirichletResult solveDirichlet(size_t N,  double eps) {
 	auto runtime = std::chrono::steady_clock::now();
 	auto runtimeDuration = std::chrono::duration_cast<std::chrono::duration<double>>(runtime - startTime);
 
-	DirichletResult result(omp_get_max_threads(), u_mat, iterations, runtimeDuration.count(), eps);
+	Results_of_Dirichlet result(omp_get_max_threads(), u_mat, iterations, runtimeDuration.count(), eps);
 
 	return result;
 }
 
-inline void printCSV(int threads, size_t dim, double runtimeDuration) {
+inline void print_CSV(int threads, size_t dim, double runtimeDuration) {
 	std::cout << threads << "," << dim << "," << runtimeDuration << std::endl;
 }
 
@@ -232,6 +232,6 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	std::cout << solveDirichlet(N-2, eps).toString();
+	std::cout << Solution_of_Diri(N-2, eps).benchmark();
 	return 0;
 }
